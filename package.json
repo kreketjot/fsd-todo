@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/icons": "^5.0.1",
     "@reduxjs/toolkit": "^1.9.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -11,10 +12,18 @@
     "@types/node": "^17.0.45",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
+    "antd": "^5.1.6",
+    "axios": "^1.2.3",
+    "classnames": "^2.3.2",
+    "compose-function": "^3.0.3",
+    "normalizr": "^3.6.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
+    "react-router": "^6.7.0",
+    "react-router-dom": "^6.7.0",
     "react-scripts": "5.0.1",
+    "sass": "^1.57.1",
     "typescript": "^4.9.4",
     "web-vitals": "^2.1.4"
   },
@@ -28,7 +37,23 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "semi": [
+        "error",
+        "always"
+      ],
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "eol-last": "error",
+      "comma-dangle": [
+        "error",
+        "always-multiline"
+      ],
+      "no-trailing-spaces": "error"
+    }
   },
   "browserslist": {
     "production": [
@@ -41,5 +66,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/compose-function": "^0.0.30",
+    "@types/react-router": "^5.1.20",
+    "@types/react-router-dom": "^5.3.3",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.1.0"
   }
 }
