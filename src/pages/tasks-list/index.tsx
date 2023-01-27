@@ -1,12 +1,13 @@
-import { Col, Empty, Layout, Row, Spin, Typography } from 'antd';
-import { useDispatch } from 'react-redux';
+import { useEffect } from "react";
+import { Col, Empty, Layout, Row, Spin, Typography } from "antd";
 
-import { TasksFilters } from 'features/task-filters';
-import { ToggleTask } from 'features/toggle-task';
+import { TasksFilters } from "features/tasks-filter";
+import { ToggleTask } from "features/toggle-task";
 
-import { taskModel, TaskRow } from 'entities/task';
+import { taskModel, TaskRow } from "enitities/task";
 
-import styles from './styles.module.scss';
+import styles from "./styles.module.scss";
+import { useAppDispatch } from "app/store";
 
 const TasksList = () => {
   return (
@@ -28,13 +29,13 @@ const TasksList = () => {
   );
 };
 
-function PageContent() {
-  const dispatch = useDispatch();
+const PageContent = () => {
+  const dispatch = useAppDispatch();
+  useEffect(() => dispatch(taskModel.getTasksListAsync({})), [dispatch]);
 
-  const { isFetching } = taskModel.getTasksListAsync()(dispatch);
-
-  const isEmpty = taskModel.isTasksEmpty();
-  const filteredTasks = taskModel.getfilteredTasks();
+  const isFetching = taskModel.useIsFetching();
+  const filteredTasks = taskModel.useFilteredTasks();
+  const isEmpty = taskModel.useIsTasksEmpty();
 
   if (isFetching) return <Spin size="large" />;
 
@@ -49,6 +50,6 @@ function PageContent() {
       />
     </Col>
   ));
-}
+};
 
 export default TasksList;

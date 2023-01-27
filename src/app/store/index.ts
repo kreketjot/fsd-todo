@@ -1,17 +1,2 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import { taskModel } from 'enitities/task';
-
-export const store = configureStore({
-  reducer: {
-    tasks: taskModel.reducer,
-  },
-});
-
-export type AppDispatch = typeof store.dispatch
-export type RootState = ReturnType<typeof store.getState>
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  RootState,
-  unknown,
-  Action<string>
->
+export * from "./hooks";
+export * from "./store";
