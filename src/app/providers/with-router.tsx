@@ -6,6 +6,6 @@ export const withRouter = (component: () => React.ReactNode) => () => (
   <BrowserRouter>
     <Suspense
       fallback={<Spin delay={300} className="overlay" size="large" />}
-    ></Suspense>
+    >{component()}</Suspense>
   </BrowserRouter>
 );

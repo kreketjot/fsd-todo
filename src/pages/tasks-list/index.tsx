@@ -1,13 +1,13 @@
-import { useEffect } from "react";
 import { Col, Empty, Layout, Row, Spin, Typography } from "antd";
 
 import { TasksFilters } from "features/tasks-filter";
 import { ToggleTask } from "features/toggle-task";
 
-import { taskModel, TaskRow } from "enitities/task";
+import { TaskRow } from "enitities/task";
+
+import { useGetTasksListQuery } from "shared/api/typicode/tasks";
 
 import styles from "./styles.module.scss";
-import { useAppDispatch } from "app/store";
 
 const TasksList = () => {
   return (
@@ -30,18 +30,15 @@ const TasksList = () => {
 };
 
 const PageContent = () => {
-  const dispatch = useAppDispatch();
-  useEffect(() => dispatch(taskModel.getTasksListAsync({})), [dispatch]);
+  const { data, isLoading } = useGetTasksListQuery({});
 
-  const isFetching = taskModel.useIsFetching();
-  const filteredTasks = taskModel.useFilteredTasks();
-  const isEmpty = taskModel.useIsTasksEmpty();
+  const isEmpty = !data?.length;
 
-  if (isFetching) return <Spin size="large" />;
+  if (isLoading) return <Spin size="large" />;
 
   if (isEmpty) return <Empty description="No tasks found" />;
 
-  return filteredTasks.map((task) => (
+  return data.map((task) => (
     <Col key={task.id} span={24}>
       <TaskRow
         data={task}

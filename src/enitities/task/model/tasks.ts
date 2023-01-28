@@ -1,13 +1,12 @@
 import {
   createSlice,
   PayloadAction,
-  createAsyncThunk,
   createSelector,
 } from "@reduxjs/toolkit";
 import { RootState, useAppSelector } from "app/store";
 import { schema, normalize } from "normalizr";
 
-import { Task, typicodeApi } from "shared/api";
+import { Task } from "shared/api";
 
 export type QueryConfig = {
   completed?: boolean;
@@ -29,29 +28,11 @@ export const normalizeTasks = (data: Task[]) =>
 export type TasksState = {
   data: NormalizedTasks;
   queryConfig?: QueryConfig;
-  status: "idle" | "loading" | "failed";
 };
 const initialState: TasksState = {
   data: {},
   queryConfig: {},
-  status: "idle",
 };
-
-export const getTasksListAsync = createAsyncThunk(
-  "tasks/fetchTasks",
-  async (params: typicodeApi.tasks.GetTasksListParams) => {
-    const response = await typicodeApi.tasks.getTasksList(params);
-    return response.data;
-  }
-);
-
-export const getTaskByIdAsync = createAsyncThunk(
-  "tasks/fetchTask",
-  async (params: typicodeApi.tasks.GetTaskByIdParams) => {
-    const response = await typicodeApi.tasks.getTaskById(params);
-    return response.data;
-  }
-);
 
 export const taskModel = createSlice({
   name: "tasks",
@@ -64,32 +45,6 @@ export const taskModel = createSlice({
     setQueryConfig: (state, action: PayloadAction<QueryConfig>) => {
       state.queryConfig = action.payload;
     },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(getTasksListAsync.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(getTasksListAsync.fulfilled, (state, action) => {
-        state.status = "idle";
-        state.data = normalizeTasks(action.payload).entities.tasks;
-      })
-      .addCase(getTasksListAsync.rejected, (state) => {
-        state.status = "failed";
-      })
-      .addCase(getTaskByIdAsync.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(getTaskByIdAsync.fulfilled, (state, action) => {
-        state.status = "idle";
-        state.data = {
-          ...state.data,
-          ...normalizeTask(action.payload).entities.tasks,
-        };
-      })
-      .addCase(getTaskByIdAsync.pending, (state) => {
-        state.status = "failed";
-      });
   },
 });
 
@@ -117,9 +72,5 @@ export const useIsTasksEmpty = () =>
   );
 export const useTask = (taskId: number) =>
   useAppSelector((state: RootState) => state.tasks.data[taskId]);
-const useStatus = () =>
-  useAppSelector((state: RootState) => state.tasks.status);
-export const useIsFetching = () => useStatus() === "loading";
-export const useIsErrorOnFetching = () => useStatus() === "failed";
 
 export const reducer = taskModel.reducer;

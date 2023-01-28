@@ -1,24 +1,18 @@
-import { useEffect } from "react";
 import { Button, Layout, Result } from "antd";
-import { useAppDispatch } from "app/store";
 import { Link, useParams } from "react-router-dom";
 
 import { ToggleTask } from "features/toggle-task";
-import { taskModel, TaskCard } from "enitities/task";
+import { TaskCard } from "enitities/task";
 
 import styles from "./styles.module.scss";
+import { useGetTaskByIdQuery } from "shared/api/typicode/tasks";
 
 const TaskDetails = () => {
-  const dispatch = useAppDispatch();
-  const { taskId } = useParams();
+  const taskId = +useParams().taskId!;
+ 
+  const { data, isLoading, isError } = useGetTaskByIdQuery({ taskId });
 
-  useEffect(() => dispatch(taskModel.getTaskByIdAsync({ taksId })), [dispatch]);
-
-  const task = taskModel.useTask(+taskId!);
-  const isFetching = taskModel.useIsFetching();
-  const isError = taskModel.useIsErrorOnFetching();
-
-  if (!task && isError)
+  if (!data && isError)
     return (
       <Result
         status={404}
@@ -36,9 +30,9 @@ const TaskDetails = () => {
     <Layout className={styles.root}>
       <Layout.Content className={styles.content}>
         <TaskCard
-          data={task}
+          data={data}
           size="default"
-          loading={isFetching}
+          loading={isLoading}
           className={styles.card}
           bodyStyle={{ height: 400 }}
           extra={<Link to="/">Back to tasks list</Link>}

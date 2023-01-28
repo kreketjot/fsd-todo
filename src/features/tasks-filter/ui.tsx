@@ -3,11 +3,12 @@ import { useAppDispatch } from "app/store";
 
 import { DEFAULT_FILTER, filtersList } from "./config";
 import { taskModel } from "enitities/task";
+import { useGetTasksListQuery } from "shared/api/typicode/tasks";
 
 export const TasksFilters = () => {
   const dispatch = useAppDispatch();
 
-  const isFetching = taskModel.useIsFetching();
+  const { isLoading } = useGetTasksListQuery({});
 
   const onFilterClick = (config: taskModel.QueryConfig) =>
     dispatch(taskModel.setQueryConfig(config));
@@ -19,7 +20,7 @@ export const TasksFilters = () => {
           key={id}
           onClick={() => onFilterClick(config)}
           value={id}
-          disabled={isFetching}
+          disabled={isLoading}
         >
           {title}
         </Radio.Button>

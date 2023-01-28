@@ -18,6 +18,6 @@ export const TaskRow = ({
 }: TaskRowProps) => (
   <Row className={cn(styles.root, { [styles.completed]: data.completed })}>
     {before}
-    {titleHref ? <Link to={titleHref}>data.title</Link> : data.title}
+    {titleHref ? <Link to={titleHref}>{data.title}</Link> : data.title}
   </Row>
 );

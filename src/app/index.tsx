@@ -4,7 +4,7 @@ import { withProviders } from './providers';
 import './styles/index.scss';
 
 const App = () => (
-  <div className='app'>
+<div className='app'>
     <Routing />
   </div>
 );
